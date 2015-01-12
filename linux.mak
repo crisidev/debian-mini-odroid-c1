@@ -35,7 +35,7 @@ $(BOOT_DIR): $(UIMAGE_BIN) $(MESON8B_ODROIDC_DTB_BIN)
 	mkdir -p "$@.tmp"
 	cp -p $(LINUX_SRC)/arch/arm/boot/uImage "$@.tmp"
 	cp -p $(LINUX_SRC)/arch/arm/boot/dts/meson8b_odroidc.dtb "$@.tmp"
-	cp -p hardkernel-720.bmp "$@.tmp"
+	#cp -p hardkernel-720.bmp "$@.tmp"
 	mv "$@.tmp" $@
 	touch $@
 
