@@ -26,7 +26,7 @@ LINUX_BRANCH := odroidc-3.10.y
 LINUX_SRC := linux
 LINUX_VERSION := 3.10.44
 
-ROOT_SIZE_MB := 1024
+ROOT_SIZE_MB := 2048
 BOOT_SIZE_MB := 32
 
 INCLUDE_PACKAGE := ca-certificates,ssh,vim-nox,htop,iotop,vnstat,locales,usbmount,initramfs-tools,ntpdate,tmux,sudo,bash-completion
