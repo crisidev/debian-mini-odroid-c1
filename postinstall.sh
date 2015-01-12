@@ -44,7 +44,7 @@ update-initramfs -c -t -k $KERNEL_VERSION
 
 insserv framebuffer-start
 insserv hostname-init
-imsserv zram
+insserv zram
 
 # Prevent apt-get from starting services
 echo "#!/bin/sh
