@@ -1,5 +1,5 @@
-DIST := stable
-DIST_URL := http://ftp.debian.org/debian/
+DIST := jessie
+DIST_URL := http://http.debian.net/debian/
 DIST_ARCH := armhf
 
 BOOT_DIR := boot
@@ -26,3 +26,8 @@ LINUX_BRANCH := odroidc-3.10.y
 LINUX_SRC := linux
 LINUX_VERSION := 3.10.44
 
+ROOT_SIZE_MB := 1024
+BOOT_SIZE_MB := 32
+
+INCLUDE_PACKAGE := ca-certificates,ssh,vim-nox,htop,iotop,vnstat,locales,usbmount,initramfs-tools,ntpdate,tmux,sudo,bash-completion
+INSTALL_KODI := 0

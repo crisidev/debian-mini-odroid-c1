@@ -128,6 +128,9 @@ lodev=$(losetup_partition $outfile 2)
 partprobe $lodev
 echo "Formatting root partition on $lodev..."
 mkfs.ext4 -b 4096 -E stride=16384,stripe-width=16384 -m 1 -L root $lodev
+tune2fs -o journal_data_writeback $lodev
+tune2fs -O ^has_journal $lodev
+e2fsck -f $lodev
 #tune2fs -i 0 -c 0 $lodev
 root_uuid=`blkid $lodev | sed -n 's/.*UUID=\"\([^\"]*\)\".*/\1/p'`
 mkdir -p mnt

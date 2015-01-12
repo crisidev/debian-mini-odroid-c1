@@ -6,19 +6,21 @@
 
 set -e
 
-if [ "$#" -ne 3 ]; then
-	echo "Usage: $0 DIST DIST_URL KERNEL_VERSION"
+if [ "$#" -ne 4 ]; then
+	echo "Usage: $0 DIST DIST_URL KERNEL_VERSION INSTALL_KODI"
 	exit 1
 fi
 
 DIST=$1
 DIST_URL=$2
 KERNEL_VERSION=$3
+INSTALL_KODI=$4
+MARILLAT_URL="http://www.deb-multimedia.org"
 
 echo "Running postinstall.sh script..."
 
 # Set root password
-echo "root:odroid" | chpasswd
+echo "root:root" | chpasswd
 
 # Set the locale
 sed -i "s/^#[[:space:]]*en_US\.UTF-8\(.*\)/en_US\.UTF-8\1/g" /etc/locale.gen
@@ -31,6 +33,9 @@ dpkg-reconfigure -f noninteractive tzdata
 echo "deb $DIST_URL $DIST main contrib non-free" > /etc/apt/sources.list
 echo "deb-src $DIST_URL $DIST main contrib non-free" >> /etc/apt/sources.list
 
+# Install marillat repo
+echo "deb $MARILLAT_URL $DIST main non-free" >> /etc/apt/sources.list
+
 # Update apt
 apt-get update
 
@@ -39,6 +44,7 @@ update-initramfs -c -t -k $KERNEL_VERSION
 
 insserv framebuffer-start
 insserv hostname-init
+imsserv zram
 
 # Prevent apt-get from starting services
 echo "#!/bin/sh
@@ -54,6 +60,12 @@ if [ -d "/postinst" ]; then
 			$i
 		fi
 	done
+fi
+
+
+# Install Kodi
+if [ "$INSTALL_KODI" = "1" ]; then
+    apt-get install -y --force-yes kodi-standalone kodi
 fi
 
 # Re-enable services to start

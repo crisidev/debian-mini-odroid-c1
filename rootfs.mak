@@ -26,7 +26,7 @@ build: $(IMAGE_FILE)
 $(ROOTFS_DIR).base:
 	if test -d "$@.tmp"; then rm -rf "$@.tmp" ; fi
 	mkdir -p $@.tmp
-	debootstrap --foreign --no-check-gpg --include=ca-certificates,ssh,vim,locales,usbmount,initramfs-tools --arch=$(DIST_ARCH) $(DIST) $@.tmp $(DIST_URL)
+	debootstrap --foreign --no-check-gpg --include=$(INCLUDE_PACKAGE) --arch=$(DIST_ARCH) $(DIST) $@.tmp $(DIST_URL)
 	cp `which qemu-arm-static` $@.tmp/usr/bin
 	chroot $@.tmp /bin/bash -c "/debootstrap/debootstrap --second-stage"
 	rm $@.tmp/etc/hostname
@@ -45,7 +45,7 @@ $(ROOTFS_DIR): $(ROOTFS_DIR).base
 	mount -o bind /dev $@/dev
 	cp postinstall.sh $@
 	if [ -d "postinst" ]; then cp -r postinst $@ ; fi
-	chroot $@ /bin/bash -c "/postinstall.sh $(DIST) $(DIST_URL) $(LINUX_VERSION)"
+	chroot $@ /bin/bash -c "/postinstall.sh $(DIST) $(DIST_URL) $(LINUX_VERSION) $(INSTALL_KODI)"
 	for i in patches/*.patch ; do patch -p0 -d $@ < $$i ; done
 	umount $@/proc
 	umount $@/sys
@@ -60,7 +60,7 @@ $(RAMDISK_FILE): $(ROOTFS_DIR)
 
 $(IMAGE_FILE): $(ROOTFS_DIR) $(RAMDISK_FILE)
 	if test -f "$@.tmp"; then rm "$@.tmp" ; fi
-	./createimg.sh $@.tmp 32 768 $(BOOT_DIR) $(ROOTFS_DIR) $(UBOOT_BIN_DIR) $(RAMDISK_FILE)
+	./createimg.sh $@.tmp $(BOOT_SIZE_MB) $(ROOT_SIZE_MB) $(BOOT_DIR) $(ROOTFS_DIR) $(UBOOT_BIN_DIR) $(RAMDISK_FILE)
 	mv $@.tmp $@
 	touch $@
 

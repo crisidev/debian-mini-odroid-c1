@@ -1,0 +1,15 @@
+--- etc/rc.local	2015-01-11 20:12:06.144526521 +0000
++++ etc/rc.local	2015-01-11 23:57:12.559611126 +0000
+@@ -11,4 +11,12 @@
+ #
+ # By default this script does nothing.
+ 
++if [ ! -e /etc/ssh/ssh_host_rsa_key ]; then
++    dpkg-reconfigure openssh-server
++fi
++
++echo 500 > /proc/sys/vm/dirty_writeback_centisecs 
++echo 3000 > /proc/sys/vm/dirty_expire_centisecs
++echo 20 > /proc/sys/vm/dirty_ratio 
++
+ exit 0
